@@ -47,6 +47,7 @@ app.post("/api/courses", (req, res) => {
   if (!req.body.name || req.body.name.length < 3) {
     //404 bad request
     res.status(404).send("Invalid input");
+    
   } else {
     const course = {
       id: courses.length + 1,

@@ -47,7 +47,7 @@ app.post("/api/courses", (req, res) => {
   if (!req.body.name || req.body.name.length < 3) {
     //404 bad request
     res.status(404).send("Invalid input");
-    
+
   } else {
     const course = {
       id: courses.length + 1,
@@ -58,17 +58,13 @@ app.post("/api/courses", (req, res) => {
   }
 });
 
-//WITH JOI VALIDATION
-/*
+//POST REQUEST WITH JOI VALIDATION
 app.post("/api/courses/joi", (req, res) => {
-  const schema = Joi.object({
-    name: Joi.string().min(3).required(),
-  });
 
-  const result = schema.validate(req.body, schema);
+  const { error } = validation(req.body);
 
-  if (result.error) {
-    res.status(400).send(result.error.details[0].message);
+  if (error) {
+    res.status(400).send(error.details[0].message);
     return;
   }
   const course = {
@@ -77,7 +73,55 @@ app.post("/api/courses/joi", (req, res) => {
   };
   courses.push(course);
   res.send(course);
-});*/
+});
+
+//PUT REQUEST WITH JOI VALIDATION
+app.put("/api/courses/:id", (req, res) => {
+
+  // Look up the course
+  // If not existing, return 404
+  
+  const course = courses.find((c) => c.id === parseInt(req.params.id));
+  if (!course)
+    // 404
+    res.status(404).send("Code with given id was not found");
+
+    const { error } = validation(req.body);
+
+if (error) {
+  res.status(400).send(error.details[0].message);
+  return;
+}
+  // Update course
+  course.name = req.body.name;
+  // Return the updated course
+  res.send(course);
+  
+});
+
+app.delete("/api/courses/:id", (req, res) => {
+  // Look up the course
+  // If not existing, return 404
+  const course = courses.find((c) => c.id === parseInt(req.params.id));
+  if (!course)
+    // 404
+    res.status(404).send("Code with given id was not found");
+    
+  const index = courses.indexOf(course);  
+  courses.splice(index,1);
+
+  res.send(course);
+
+});
+
+function validation(course) {
+  const schema = Joi.object({
+    name: Joi.string().min(3).required(),
+  });
+
+  return schema.validate(course);
+}
+
 
 // PORT -> Environment variable
 const port = process.env.PORT || 3000;

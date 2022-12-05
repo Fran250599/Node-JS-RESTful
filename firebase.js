@@ -1,3 +1,5 @@
+// Express API with database connection and data persistence
+
 const express = require("express");
 const User = require("./config");
 const app = express();

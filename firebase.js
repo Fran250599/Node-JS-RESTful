@@ -6,6 +6,12 @@ const app = express();
 
 app.use(express.json());
 
+app.get("/", async(req, res) =>{
+    const snapshot = await User.get();
+    const list = snapshot.docs.map((doc)=>doc.data());
+    res.send(list);
+});
+
 app.post("/newUser", async(req, res)=>{
 
     const data = req.body;

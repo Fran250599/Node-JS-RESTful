@@ -26,9 +26,9 @@ app.get("/api/courses/:year/:month", (req, res) => {
 // For this one, we will implement an array of courses
 // with a GET request, logic and error status codes
 const courses = [
-  { id: 1, name: "course1" },
-  { id: 2, name: "course2" },
-  { id: 3, name: "course3" },
+  { id: 1, name: "Fundamentos de informatica" },
+  { id: 2, name: "Bases de datos" },
+  { id: 3, name: "Programacion" },
 ];
 
 app.get("/api/courses/:id", (req, res) => {
@@ -36,7 +36,7 @@ app.get("/api/courses/:id", (req, res) => {
 
   if (!course)
     // 404
-    res.status(404).send("Code with given id was not found");
+    res.status(404).send("Course with given id was not found");
 
   res.send(course);
 });
